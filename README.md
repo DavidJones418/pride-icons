@@ -21,21 +21,21 @@ Browsers which don’t yet support SVG icons (notably Safari) will fall back to 
 
 ## Files
 
-### `icon.svg`
+### [`icon.svg`](icon.svg)
 
-Handwritten SVG modified from the original design of the _Progress Pride_ flag.
+Modified from the original design. (180x180, 1.2K)
 
 [![icon.svg](icon.svg)](icon.svg)
 
-### `apple-touch-icon.png`
+### [`apple-touch-icon.png`](apple-touch-icon.png)
 
-Exported from `pride.svg` via [Inkscape](https://inkscape.org) (default settings) and optimized with [Squoosh](https://squoosh.app).
+Exported from `pride.svg` via [Inkscape](https://inkscape.org) (default settings) and optimized with [Squoosh](https://squoosh.app). (180x180, 1.1K)
 
 [![apple-touch-icon.png](apple-touch-icon.png)](apple-touch-icon.png)
 
-### `favicon.ico`
+### [`favicon.ico`](favicon.ico)
 
-Converted from `apple-touch-icon.png` with [ImageMagick](https://www.imagemagick.org).
+Converted from `apple-touch-icon.png` with [ImageMagick](https://www.imagemagick.org). (48x48, 9.4K)
 
 ```shell
 magick apple-touch-icon.png -resize 48x48 favicon.ico
