@@ -1,48 +1,55 @@
-# Pride Icons
+# <img src="pride.svg" alt="" width="18" height="18" /> Pride Icons
 
-Rounded square versions of Daniel Quasar’s _Progress Pride_ flag.
+Icon versions of [Daniel Quasar’s _Progress Pride_ flag](https://progress.gay).
 
 ## Usage
 
-Serve the files from the root of your website and add a link to the SVG icon:
+Copy the files from `icons/` to your public directory, e.g. `npx degit davidjones418/pride-icons/icons static`:
+
+- [`icons/apple-touch-icon.png`](icons/apple-touch-icon.png)
+- [`icons/favicon.ico`](icons/favicon.ico)
+- [`icons/favicon.svg`](icons/favicon.svg)
+
+Link to the favicons:
 
 ```html
 <html>
   <head>
     ...
-    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    ...
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   ...
 </html>
 ```
 
-Browsers which don’t yet support SVG icons (notably Safari) will fall back to requesting `/favicon.ico` or `/apple-touch-icon.png`.
+Omit the link to `/apple-touch-icon.png` to stop Firefox loading it.
+
+This snippet was tested in Chrome 98, Firefox 97, and Safari 15.3:
+
+- Chrome fetches `/favicon.svg`
+- Firefox fetches `/favicon.svg`
+- Safari fetches `/favicon.ico`
+- “Add to Home Screen” on iOS fetches `/apple-touch-icon.png`
+
+_Note that Safari aggressively caches favicons. Try emptying `~/Library/Safari/Favicon Cache` through Finder to get new icons to show up during testing._
 
 ## Files
 
-### [`icon.svg`](icon.svg)
+Generated from [`pride.svg`](pride.svg) by [`scripts/build.js`](scripts/build.js).
 
-Modified from the original design. (180x180, 1.2K)
+### [`icons/apple-touch-icon.png`](icons/apple-touch-icon.png)
 
-[![icon.svg](icon.svg)](icon.svg)
+[![icons/apple-touch-icon.png](icons/apple-touch-icon.png)](icons/apple-touch-icon.png)
 
-### [`apple-touch-icon.png`](apple-touch-icon.png)
+### [`icons/favicon.ico`](icons/favicon.ico)
 
-Exported from `pride.svg` via [Inkscape](https://inkscape.org) (default settings) and optimized with [Squoosh](https://squoosh.app). (180x180, 1.1K)
+[![icons/favicon.ico](icons/favicon.ico)](icons/favicon.ico)
 
-[![apple-touch-icon.png](apple-touch-icon.png)](apple-touch-icon.png)
+### [`icons/favicon.svg`](icons/favicon.svg)
 
-### [`favicon.ico`](favicon.ico)
-
-Converted from `apple-touch-icon.png` with [ImageMagick](https://www.imagemagick.org). (48x48, 9.4K)
-
-```shell
-magick apple-touch-icon.png -resize 48x48 favicon.ico
-```
-
-[![favicon.ico](favicon.ico)](favicon.ico)
+[![icons/favicon.svg](icons/favicon.svg)](icons/favicon.svg)
 
 ## License
 
-[CC-BY-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) [David Jones](https://david.omg.lol). Based on the _Progress Pride_ flag created by [Daniel Quasar](https://progress.gay).
+Based on the _Progress Pride_ flag [CC-BY-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) Daniel Quasar.
