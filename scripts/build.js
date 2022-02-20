@@ -1,33 +1,63 @@
 #!/usr/bin/env node
 
+import { program } from "commander";
 import fs from "node:fs/promises";
 import sharp from "sharp";
 import svgo from "svgo";
 
-const favicon = optimizeSVG(await fs.readFile("pride.svg"));
-const appleTouchIcon = optimizeSVG(favicon, {
-  plugins: [{ name: "removeAttrs", params: { attrs: "mask" } }],
-});
+await program
+  .argument("<src>", "input SVG file path")
+  .argument("<dest>", "output directory path")
+  .action(main)
+  .parseAsync();
 
-await fs.mkdir("icons", { recursive: true });
+/**
+ * @param {string} src input SVG file path
+ * @param {string} dest output directory path
+ */
+async function main(src, dest) {
+  const svg = await fs.readFile(src);
 
-// Export scalable SVG favicon.
-await fs.writeFile("icons/favicon.svg", favicon);
+  await fs.mkdir(dest, { recursive: true });
+  await writeFaviconSVG(`${dest}/favicon.svg`, svg);
+  await writeFaviconICO(`${dest}/favicon.ico`, svg);
+  await writeAppleTouchIconPNG(`${dest}/apple-touch-icon.png`, svg);
+}
 
-// Export fallback 48x48 and 64x64 favicon.
-const faviconPNG = sharp(favicon).png({ compressionLevel: 9 });
-const faviconICO = toICO([
-  await faviconPNG.resize(48).toBuffer({ resolveWithObject: true }),
-  await faviconPNG.resize(64).toBuffer({ resolveWithObject: true }),
-]);
-await fs.writeFile("icons/favicon.ico", faviconICO);
+/**
+ * @param {string} file
+ * @param {Buffer} svg
+ */
+async function writeFaviconSVG(file, svg) {
+  await fs.writeFile(file, optimizeSVG(svg));
+}
 
-// Export square 180x180 touch icon.
-const appleTouchIconPNG = sharp(appleTouchIcon).png({ compressionLevel: 9 });
-await fs.writeFile(
-  "icons/apple-touch-icon.png",
-  await appleTouchIconPNG.resize(180).toBuffer()
-);
+/**
+ * @param {string} file
+ * @param {Buffer} svg
+ */
+async function writeFaviconICO(file, svg) {
+  const png = sharp(svg).png({ compressionLevel: 9 });
+  const images = await Promise.all([
+    await png.resize(48).toBuffer({ resolveWithObject: true }),
+    await png.resize(64).toBuffer({ resolveWithObject: true }),
+  ]);
+
+  await fs.writeFile(file, toICO(images));
+}
+
+/**
+ * @param {string} file
+ * @param {Buffer} svg
+ */
+async function writeAppleTouchIconPNG(file, svg) {
+  const svgNoMask = optimizeSVG(svg, {
+    plugins: [{ name: "removeAttrs", params: { attrs: "mask" } }],
+  });
+  const png = sharp(svgNoMask).png({ compressionLevel: 9 });
+
+  await fs.writeFile(file, await png.resize(180).toBuffer());
+}
 
 /**
  * Wraps {@link svgo.optimize}.
