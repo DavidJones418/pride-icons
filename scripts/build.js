@@ -39,8 +39,9 @@ async function writeFaviconSVG(file, svg) {
 async function writeFaviconICO(file, svg) {
   const png = sharp(svg).png({ compressionLevel: 9 });
   const images = await Promise.all([
+    await png.resize(16).toBuffer({ resolveWithObject: true }),
+    await png.resize(32).toBuffer({ resolveWithObject: true }),
     await png.resize(48).toBuffer({ resolveWithObject: true }),
-    await png.resize(64).toBuffer({ resolveWithObject: true }),
   ]);
 
   await fs.writeFile(file, toICO(images));
