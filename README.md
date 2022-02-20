@@ -1,4 +1,4 @@
-# <img src="pride.svg" alt="" width="18" height="18" /> Pride Icons
+# ![Pride Icon](pride.svg) Pride Icons
 
 Icon versions of [Daniel Quasar’s _Progress Pride_ flag](https://progress.gay).
 
@@ -40,15 +40,15 @@ Generated from [`pride.svg`](pride.svg) by [`scripts/build.js`](scripts/build.js
 
 ### [`icons/apple-touch-icon.png`](icons/apple-touch-icon.png)
 
-[![icons/apple-touch-icon.png](icons/apple-touch-icon.png)](icons/apple-touch-icon.png)
+![icons/apple-touch-icon.png](icons/apple-touch-icon.png)
 
 ### [`icons/favicon.ico`](icons/favicon.ico)
 
-[![icons/favicon.ico](icons/favicon.ico)](icons/favicon.ico)
+![icons/favicon.ico](icons/favicon.ico)
 
 ### [`icons/favicon.svg`](icons/favicon.svg)
 
-[![icons/favicon.svg](icons/favicon.svg)](icons/favicon.svg)
+![icons/favicon.svg](icons/favicon.svg)
 
 ## License
 
