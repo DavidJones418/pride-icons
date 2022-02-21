@@ -52,4 +52,4 @@ Generated from [`src/pride.svg`](src/pride.svg) by [`scripts/build.js`](scripts/
 
 ## License
 
-Based on the _Progress Pride_ flag [CC-BY-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) Daniel Quasar.
+[MIT](LICENSE). Based on the _Progress Pride_ flag [CC-BY-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) Daniel Quasar.
