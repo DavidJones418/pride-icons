@@ -19,45 +19,49 @@ async function main(src, dest) {
   const svg = await fs.readFile(src);
 
   await fs.mkdir(dest, { recursive: true });
-  await writeFaviconSVG(`${dest}/favicon.svg`, svg);
-  await writeFaviconICO(`${dest}/favicon.ico`, svg);
-  await writeAppleTouchIconPNG(`${dest}/apple-touch-icon.png`, svg);
+  await Promise.all([
+    writeFaviconSvg(dest, svg),
+    writeFaviconIco(dest, svg),
+    writeAppleTouchIconPng(dest, svg),
+  ]);
 }
 
 /**
- * @param {string} file
+ * @param {string} dest
  * @param {Buffer} svg
  */
-async function writeFaviconSVG(file, svg) {
-  await fs.writeFile(file, optimizeSVG(svg));
+async function writeFaviconSvg(dest, svg) {
+  const data = optimizeSVG(svg);
+
+  return fs.writeFile(`${dest}/favicon.svg`, data);
 }
 
 /**
- * @param {string} file
+ * @param {string} dest
  * @param {Buffer} svg
  */
-async function writeFaviconICO(file, svg) {
-  const png = sharp(svg).png({ compressionLevel: 9 });
-  const images = await Promise.all([
-    await png.resize(16).toBuffer({ resolveWithObject: true }),
-    await png.resize(32).toBuffer({ resolveWithObject: true }),
-    await png.resize(48).toBuffer({ resolveWithObject: true }),
+async function writeFaviconIco(dest, svg) {
+  const data = await createIco([
+    sharp(svg).resize(16),
+    sharp(svg).resize(32),
+    sharp(svg).resize(48),
   ]);
 
-  await fs.writeFile(file, toICO(images));
+  return fs.writeFile(`${dest}/favicon.ico`, data);
 }
 
 /**
- * @param {string} file
+ * @param {string} dest
  * @param {Buffer} svg
  */
-async function writeAppleTouchIconPNG(file, svg) {
+async function writeAppleTouchIconPng(dest, svg) {
   const svgNoMask = optimizeSVG(svg, {
     plugins: [{ name: "removeAttrs", params: { attrs: "mask" } }],
   });
-  const png = sharp(svgNoMask).png({ compressionLevel: 9 });
+  const image = sharp(svgNoMask).resize(180);
+  const data = await image.png({ compressionLevel: 9 }).toBuffer();
 
-  await fs.writeFile(file, await png.resize(180).toBuffer());
+  return fs.writeFile(`${dest}/apple-touch-icon.png`, data);
 }
 
 /**
@@ -75,59 +79,68 @@ function optimizeSVG(svgBuffer, options) {
 
 /**
  * https://en.wikipedia.org/wiki/ICO_(file_format)#Outline
- * @param {{
- *  data: Buffer;
- *  info: sharp.OutputInfo;
- * }[]} images
+ * @param {sharp.Sharp[]} images
  */
-function toICO(images) {
-  const ICONDIR_SIZE = 6;
-  const ICONDIRENTRY_SIZE = 16;
+async function createIco(images) {
+  const MAGIC_BYTES = 6;
+  const ENTRY_BYTES = 16;
 
-  let ico = Buffer.alloc(ICONDIR_SIZE + ICONDIRENTRY_SIZE * images.length);
-  let offset = 0;
+  const iconDir = new ArrayBuffer(MAGIC_BYTES + ENTRY_BYTES * images.length);
+  writeIcoMagic(new DataView(iconDir, 0, MAGIC_BYTES), images);
+  let byteOffset = MAGIC_BYTES;
 
-  // ICONDIR
-
-  // Reserved. Must always be 0.
-  offset = ico.writeUint16LE(0, offset);
-
-  // Specifies image type: 1 for icon (.ICO) image, 2 for cursor (.CUR) image. Other values are invalid.
-  offset = ico.writeUint16LE(1, offset);
-
-  // Specifies number of images in the file.
-  offset = ico.writeUint16LE(images.length, offset);
+  let iconImages = Buffer.alloc(0);
 
   for (const image of images) {
-    // ICONDIRENTRY
+    const { data, info } = await image
+      .png({ compressionLevel: 9 })
+      .toBuffer({ resolveWithObject: true });
 
-    // Specifies image width in pixels. Can be any number between 0 and 255. Value 0 means image width is 256 pixels.
-    offset = ico.writeUint8(image.info.width % 256, offset);
+    writeIconDirEntry(new DataView(iconDir, byteOffset, ENTRY_BYTES), {
+      width: info.width,
+      height: info.height,
+      byteSize: data.byteLength,
+      byteOffset: iconDir.byteLength + iconImages.byteLength,
+    });
+    byteOffset += ENTRY_BYTES;
 
-    // Specifies image height in pixels. Can be any number between 0 and 255. Value 0 means image height is 256 pixels.
-    offset = ico.writeUint8(image.info.height % 256, offset);
-
-    // Specifies number of colors in the color palette. Should be 0 if the image does not use a color palette.
-    offset = ico.writeUint8(0, offset);
-
-    // Reserved. Should be 0.
-    offset = ico.writeUint8(0, offset);
-
-    // Specifies color planes. Should be 0 or 1.
-    offset = ico.writeUint16LE(0, offset);
-
-    // Specifies bits per pixel.
-    offset = ico.writeUint16LE(0, offset);
-
-    // Specifies the size of the image's data in bytes.
-    offset = ico.writeUint32LE(image.data.length, offset);
-
-    // Specifies the offset of BMP or PNG data from the beginning of the ICO/CUR file.
-    offset = ico.writeUint32LE(ico.length, offset);
-
-    // Append full PNG data.
-    ico = Buffer.concat([ico, image.data]);
+    iconImages = Buffer.concat([iconImages, data]);
   }
 
-  return ico;
+  return Buffer.concat([Buffer.from(iconDir), iconImages]);
+}
+
+/**
+ * https://en.wikipedia.org/wiki/ICO_(file_format)#Outline
+ * @param {DataView} dv
+ * @param {{ length: number }} images
+ */
+function writeIcoMagic(dv, images) {
+  dv.setUint16(0, /* reserved */ 0, true);
+  dv.setUint16(2, /* ICO */ 1, true);
+  dv.setUint16(4, images.length, true);
+}
+
+/**
+ * https://en.wikipedia.org/wiki/ICO_(file_format)#Outline
+ * @param {DataView} dv
+ * @param {{
+ *  width: number;
+ *  height: number;
+ *  paletteSize?: number;
+ *  colorPlanes?: boolean;
+ *  bitsPerPixel?: number;
+ *  byteSize: number;
+ *  byteOffset: number;
+ * }} opts
+ */
+function writeIconDirEntry(dv, opts) {
+  dv.setUint8(0, opts.width);
+  dv.setUint8(1, opts.height);
+  dv.setUint8(2, opts.paletteSize ?? 0);
+  dv.setUint8(3, /* reserved */ 0);
+  dv.setUint16(4, opts.colorPlanes ? 1 : 0, true);
+  dv.setUint16(6, opts.bitsPerPixel ?? 0, true);
+  dv.setUint32(8, opts.byteSize, true);
+  dv.setUint32(12, opts.byteOffset, true);
 }

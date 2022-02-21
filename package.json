@@ -2,8 +2,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.js pride.svg icons"
+    "build": "node scripts/build.js src/pride.svg dist"
   },
+  "prettier": {},
   "devDependencies": {
     "commander": "^9.0.0",
     "sharp": "^0.30.1",

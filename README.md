@@ -1,14 +1,14 @@
-# ![Pride Icon](pride.svg) Pride Icons
+# ![Pride Icon](src/pride.svg) Pride Icons
 
 Icon versions of [Daniel Quasar’s _Progress Pride_ flag](https://progress.gay).
 
 ## Usage
 
-Copy the files from `icons/` to your public directory, e.g. `npx degit davidjones418/pride-icons/icons static`:
+Copy the files from `dist/` to your public directory, e.g. `npx degit davidjones418/pride-icons/dist static`:
 
-- [`icons/apple-touch-icon.png`](icons/apple-touch-icon.png)
-- [`icons/favicon.ico`](icons/favicon.ico)
-- [`icons/favicon.svg`](icons/favicon.svg)
+- [`dist/apple-touch-icon.png`](dist/apple-touch-icon.png)
+- [`dist/favicon.ico`](dist/favicon.ico)
+- [`dist/favicon.svg`](dist/favicon.svg)
 
 Link to the favicons:
 
@@ -36,19 +36,19 @@ _Note that Safari aggressively caches favicons. Try emptying `~/Library/Safari/F
 
 ## Files
 
-Generated from [`pride.svg`](pride.svg) by [`scripts/build.js`](scripts/build.js).
+Generated from [`src/pride.svg`](src/pride.svg) by [`scripts/build.js`](scripts/build.js).
 
-### [`icons/apple-touch-icon.png`](icons/apple-touch-icon.png)
+### [`dist/apple-touch-icon.png`](dist/apple-touch-icon.png)
 
-![icons/apple-touch-icon.png](icons/apple-touch-icon.png)
+![dist/apple-touch-icon.png](dist/apple-touch-icon.png)
 
-### [`icons/favicon.ico`](icons/favicon.ico)
+### [`dist/favicon.ico`](dist/favicon.ico)
 
-![icons/favicon.ico](icons/favicon.ico)
+![dist/favicon.ico](dist/favicon.ico)
 
-### [`icons/favicon.svg`](icons/favicon.svg)
+### [`dist/favicon.svg`](dist/favicon.svg)
 
-![icons/favicon.svg](icons/favicon.svg)
+![dist/favicon.svg](dist/favicon.svg)
 
 ## License
 
