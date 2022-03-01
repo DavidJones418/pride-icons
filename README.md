@@ -1,4 +1,4 @@
-# ![Pride Icon](src/pride.svg) Pride Icons
+# <img src="src/pride.svg" alt="Pride Icon" width="24" height="24" /> Pride Icons
 
 Icon versions of [Daniel Quasar’s _Progress Pride_ flag](https://progress.gay).
 

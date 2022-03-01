@@ -4,10 +4,6 @@
   "scripts": {
     "build": "node scripts/build.js src/pride.svg dist"
   },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "all"
-  },
   "devDependencies": {
     "commander": "^9.0.0",
     "sharp": "^0.30.1",
