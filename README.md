@@ -17,27 +17,19 @@ npx degit davidjones418/pride-icons/dist/static public --force
 npx degit davidjones418/pride-icons/dist/static --force
 ```
 
-Link to the PNG and SVG favicons:
+Link to the SVG favicon:
 
 ```html
 <html>
   <head>
     ...
-    <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   ...
 </html>
 ```
 
-`/apple-touch-icon.png` and `/favicon.ico` are requested directly by browsers which require them, and do not need to be linked.
-
-I tested this in Chrome 98, Firefox 97, Safari 15.3, and iOS 15.3:
-
-- Chrome fetches `/favicon.svg`
-- Firefox fetches `/favicon.svg`
-- Safari fetches `/favicon.png`
-- “Add to Home Screen” on iOS fetches `/apple-touch-icon.png`
+Chrome and Firefox fetch `/favicon.svg` correctly when it is linked in `<head>`, falling back to `/favicon.ico`. Safari as of version 15.3 does not recognise SVG favicons and does not appear to request `/favicon.ico`. Adding the site to favorites or the home screen uses `/apple-touch-icon.png`.
 
 > ℹ️ Safari aggressively caches favicons, ignoring caching headers and markup changes. To get new icons to show up during testing:
 >
@@ -57,10 +49,6 @@ Generated from [`src/pride.svg`](src/pride.svg) by [`scripts/build.js`](scripts/
 ### [`dist/static/favicon.ico`](dist/static/favicon.ico)
 
 ![dist/static/favicon.ico](dist/static/favicon.ico)
-
-### [`dist/static/favicon.png`](dist/static/favicon.png)
-
-![dist/static/favicon.png](dist/static/favicon.png)
 
 ### [`dist/static/favicon.svg`](dist/static/favicon.svg)
 

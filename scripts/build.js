@@ -22,10 +22,9 @@ async function build(src, dest) {
   await fs.mkdir(dest, { recursive: true });
   await Promise.all([
     fs.writeFile(`${dest}/apple-touch-icon.png`, png.createFlat(data, 192)),
-    fs.writeFile(`${dest}/favicon.ico`, ico.create(data, [32, 48])),
-    fs.writeFile(`${dest}/favicon.png`, png.create(data, 96)),
+    fs.writeFile(`${dest}/favicon.ico`, ico.create(data, [48])),
     fs.writeFile(`${dest}/favicon.svg`, svg.optimize(data)),
   ]);
-  console.error(`<link rel="icon" href="/favicon.png" type="image/png" />`);
+
   console.error(`<link rel="icon" href="/favicon.svg" type="image/svg+xml" />`);
 }
