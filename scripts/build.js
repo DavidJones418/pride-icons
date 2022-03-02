@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import { program } from 'commander';
-import fs from 'node:fs/promises';
-import sharp from 'sharp';
-import { createIco } from '../lib/ico.js';
-import { optimizeSvg, removeMasksPlugin } from '../lib/svg.js';
+import * as commander from 'commander';
+import * as fs from 'node:fs/promises';
+import * as ico from '../lib/ico.js';
+import * as png from '../lib/png.js';
+import * as svg from '../lib/svg.js';
 
-program
+commander.program
   .argument('<src>', 'input SVG file path')
   .argument('<dest>', 'output directory path')
   .action(build)
@@ -17,21 +17,15 @@ program
  * @param {string} dest output directory path
  */
 async function build(src, dest) {
-  const svg = await fs.readFile(src);
+  const data = await fs.readFile(src);
 
   await fs.mkdir(dest, { recursive: true });
-  await fs.writeFile(`${dest}/favicon.svg`, optimizeSvg(svg));
-  await fs.writeFile(`${dest}/favicon.ico`, createIco(svg, [16, 32, 48]));
-  await fs.writeFile(`${dest}/apple-touch-icon.png`, createFlatPng(svg, 180));
-}
-
-/**
- * @param {Buffer} svg
- * @param {number} size
- */
-function createFlatPng(svg, size) {
-  return sharp(optimizeSvg(svg, { plugins: [removeMasksPlugin] }))
-    .png({ compressionLevel: 9 })
-    .flatten()
-    .resize(size);
+  await Promise.all([
+    fs.writeFile(`${dest}/apple-touch-icon.png`, png.createFlat(data, 192)),
+    fs.writeFile(`${dest}/favicon.ico`, ico.create(data, [32, 48])),
+    fs.writeFile(`${dest}/favicon.png`, png.create(data, 96)),
+    fs.writeFile(`${dest}/favicon.svg`, svg.optimize(data)),
+  ]);
+  console.error(`<link rel="icon" href="/favicon.png" type="image/png" />`);
+  console.error(`<link rel="icon" href="/favicon.svg" type="image/svg+xml" />`);
 }
