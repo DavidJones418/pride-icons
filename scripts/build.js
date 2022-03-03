@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
-import * as commander from 'commander';
 import * as fs from 'node:fs/promises';
+import sade from 'sade';
 import * as ico from '../lib/ico.js';
 import * as png from '../lib/png.js';
 import * as svg from '../lib/svg.js';
 
-commander.program
-  .argument('<src>', 'input SVG file path')
-  .argument('<dest>', 'output directory path')
+sade('build <src> <dest>')
+  .describe('Transforms a square input SVG file into favicons.')
+  .example('icon.svg static/')
   .action(build)
-  .parseAsync();
+  .parse(process.argv);
 
 /**
- * @param {string} src input SVG file path
- * @param {string} dest output directory path
+ * @param {string} src Input SVG file path
+ * @param {string} dest Output directory path
  */
 async function build(src, dest) {
   const data = await fs.readFile(src);
