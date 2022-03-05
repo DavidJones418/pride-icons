@@ -4,7 +4,7 @@ Icon versions of [Daniel Quasar’s _Progress Pride_ flag](https://progress.gay)
 
 ## Usage
 
-Copy the files from `dist/static/` to your public directory:
+Copy the files from `dist/static/` to your public directory (use `degit --force` with caution):
 
 ```sh
 # If static files live in /static (e.g. SvelteKit):
@@ -23,13 +23,20 @@ Link to the SVG favicon:
 <html>
   <head>
     ...
+    <link
+      rel="apple-touch-icon"
+      href="/apple-touch-icon.png"
+      type="image/png"
+      sizes="192x192"
+    />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   ...
 </html>
 ```
 
-Chrome and Firefox fetch `/favicon.svg` correctly when it is linked in `<head>`, falling back to `/favicon.ico`. Safari as of version 15.3 does not recognise SVG favicons and does not appear to request `/favicon.ico`. Adding the site to favorites or the home screen uses `/apple-touch-icon.png`.
+The `sizes="any"` attribute is a bit of a hack to prevent Chrome, Edge and Firefox fetching `/favicon.ico`, even though they support SVG icons. Safari will fetch both and use `/favicon.ico` as it does not (yet) support SVG icons. All browsers may use `/apple-touch-icon.png` when they require a flat square icon.
 
 > ℹ️ Safari aggressively caches favicons, ignoring caching headers and markup changes. To get new icons to show up during testing:
 >
