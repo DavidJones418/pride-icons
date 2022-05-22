@@ -8,13 +8,13 @@ Copy the files from `dist/static/` to your public directory (use `degit --force`
 
 ```sh
 # If static files live in /static (e.g. SvelteKit):
-npx degit davidjones418/pride-icons/dist --force
+npx degit caminad/pride-icons/dist --force
 
 # ...or if static files live in /public (e.g. Next.js):
-npx degit davidjones418/pride-icons/dist/static public --force
+npx degit caminad/pride-icons/dist/static public --force
 
 # ...or if static files live in / (e.g. Eleventy):
-npx degit davidjones418/pride-icons/dist/static --force
+npx degit caminad/pride-icons/dist/static --force
 ```
 
 Link to the SVG favicon:
