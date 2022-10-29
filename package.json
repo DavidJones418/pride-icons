@@ -6,7 +6,7 @@
     "check": "tsc"
   },
   "devDependencies": {
-    "@tsconfig/node16-strictest-esm": "1.0.3",
+    "@tsconfig/node18-strictest-esm": "1.0.1",
     "@types/node": "18.11.7",
     "@types/sharp": "0.31.0",
     "sade": "1.8.1",
