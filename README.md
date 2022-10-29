@@ -38,7 +38,8 @@ Link to the SVG favicon:
 
 The `sizes="any"` attribute is a bit of a hack to prevent Chrome, Edge and Firefox fetching `/favicon.ico`, even though they support SVG icons. Safari will fetch both and use `/favicon.ico` as it does not (yet) support SVG icons. All browsers may use `/apple-touch-icon.png` when they require a flat square icon.
 
-> ℹ️ Safari aggressively caches favicons, ignoring caching headers and markup changes. To get new icons to show up during testing:
+> **Note**
+> Safari aggressively caches favicons, ignoring caching headers and markup changes. To get new icons to show up during testing:
 >
 > 1. Quit Safari.
 > 2. **Finder > Go > Go to Folder...** and enter `~/Library/Safari/Favicon Cache`.
