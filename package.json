@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@tsconfig/node18-strictest-esm": "1.0.1",
-    "@types/node": "18.11.19",
+    "@types/node": "18.13.0",
     "@types/sharp": "0.31.1",
     "sade": "1.8.1",
     "sharp": "0.31.3",
